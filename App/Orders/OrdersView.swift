@@ -55,7 +55,7 @@ struct OrdersView: View {
         }
         .navigationTitle("Orders")
         .navigationDestination(for: Order.ID.self) { id in
-            OrderDetailView(order: model.orderBinding(for: id))
+            OrderDetailView(order: model.orderCopy(for: id))
         }
         .toolbar {
             if !displayAsList {

@@ -13,6 +13,7 @@ public class FoodTruckModel: ObservableObject {
     @Published public var truck = Truck()
     
     @Published public var orders: [Order] = []
+    @Published public var ordersCopy: [Order] = []
     @Published public var donuts = Donut.all
     @Published public var newDonut: Donut
         
@@ -30,6 +31,8 @@ public class FoodTruckModel: ObservableObject {
         
         let orderGenerator = OrderGenerator(knownDonuts: donuts)
         orders = orderGenerator.todaysOrders()
+        ordersCopy = orderGenerator.todaysOrders()
+        
         dailyOrderSummaries = Dictionary(uniqueKeysWithValues: City.all.map { city in
             (key: city.id, value: orderGenerator.historicalDailyOrders(since: .now, cityID: city.id))
         })
@@ -97,7 +100,21 @@ public class FoodTruckModel: ObservableObject {
             guard let index = self.orders.firstIndex(where: { $0.id == id }) else {
                 fatalError()
             }
-            return self.orders[index] = newValue
+             return self.orders[index] = newValue
+        }
+    }
+    
+    public func orderCopy(for id: Order.ID) -> Binding<Order> {
+        Binding<Order> {
+            guard let index = self.ordersCopy.firstIndex(where: { $0.id == id }) else {
+                fatalError()
+            }
+            return self.ordersCopy[index]
+        } set: { newValue in
+            guard let index = self.ordersCopy.firstIndex(where: { $0.id == id }) else {
+                fatalError()
+            }
+             return self.ordersCopy[index] = newValue
         }
     }
     
